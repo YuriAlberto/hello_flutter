@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cardona/core/feature/common/usecase.dart';
+import 'package:flutter_cardona/core/util/validador_field.dart';
 import 'package:flutter_cardona/features/login/domain/entities/usuario.dart';
 import 'package:flutter_cardona/features/login/domain/usecases/get_all_usuario.dart';
 import 'package:flutter_cardona/features/login/domain/usecases/nuevo_usuario.dart';
@@ -16,12 +17,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final GetAllUser getAllUser;
   final NuevoUsuario nuevoUsuario;
   final VerificarUsuario verificarUsuario;
+  final ValidadorCampo validadorCampo;
 
   bool _refrescar = false;
   List<Usuario> _usuarios;
 
   LoginBloc(
-      {@required GetAllUser getAllUser,
+      {this.validadorCampo,
+      @required GetAllUser getAllUser,
       @required NuevoUsuario nuevoUsuario,
       @required VerificarUsuario verificarUsuario})
       : this.getAllUser = getAllUser,
@@ -34,11 +37,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginEvent event,
   ) async* {
     if (event is VerificarUsuarioEvent) {
-      bool esta_registrado = await verificarUsuario(ParamsVerificarUsuario(
-          Usuario(password: "3434343", user_name: "lina@gmail.com")));
-      _usuarios = await getAllUser(NoParams());
-      _refrescar = _refrescar ? false : true;
-      yield ListaUsuarioShowState(usuarios: _usuarios, refrescar: _refrescar);
+      if (validadorCampo.isEmailvalido(event.username) &&
+          validadorCampo.isCampoSinNul(event.password)) {
+        bool esta_registrado = await verificarUsuario(ParamsVerificarUsuario(
+            Usuario(password: event.password, user_name: event.username)));
+        if (esta_registrado) {
+          _usuarios = await getAllUser(NoParams());
+          _refrescar = _refrescar ? false : true;
+          yield ListaUsuarioShowState(
+              usuarios: _usuarios, refrescar: _refrescar);
+        } else {
+          yield LoginInicioErrorState(
+              mensaje: "Por favor verifica email o contraseña");
+        }
+      } else {
+        yield LoginInicioErrorState(mensaje: "Por favor verifica emails");
+      }
     }
 
     if (event is AddUsuarioEvent) {

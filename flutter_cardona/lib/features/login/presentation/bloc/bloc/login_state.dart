@@ -18,3 +18,9 @@ class ListaUsuarioShowState extends LoginState {
   @override
   List<Object> get props => [usuarios];
 }
+
+class LoginInicioErrorState extends LoginState {
+  String mensaje;
+
+  LoginInicioErrorState({this.mensaje});
+}

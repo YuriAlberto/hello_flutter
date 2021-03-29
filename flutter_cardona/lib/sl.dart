@@ -1,3 +1,4 @@
+import 'package:flutter_cardona/core/util/validador_field.dart';
 import 'package:flutter_cardona/features/login/data/sourcedata/login_remote_data_source.dart';
 import 'package:flutter_cardona/features/login/domain/usecases/get_all_usuario.dart';
 import 'package:flutter_cardona/features/login/domain/usecases/nuevo_usuario.dart';
@@ -13,8 +14,11 @@ final sl = GetIt.instance;
 
 Future<void> init() {
   // blocs
-  sl.registerFactory(() =>
-      LoginBloc(getAllUser: sl(), nuevoUsuario: sl(), verificarUsuario: sl()));
+  sl.registerFactory(() => LoginBloc(
+      validadorCampo: sl(),
+      getAllUser: sl(),
+      nuevoUsuario: sl(),
+      verificarUsuario: sl()));
 
   // Use Cases
 
@@ -33,4 +37,6 @@ Future<void> init() {
 
   //! External
   sl.registerLazySingleton(() => http.Client());
+
+  sl.registerLazySingleton(() => ValidadorCampo());
 }
