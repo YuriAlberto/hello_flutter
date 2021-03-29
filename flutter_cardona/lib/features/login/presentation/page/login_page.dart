@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cardona/features/login/domain/entities/usuario.dart';
 import 'package:flutter_cardona/features/login/presentation/bloc/bloc/login_bloc.dart';
+import 'package:flutter_cardona/features/login/presentation/widgets/dialogs/nuevo_usuario_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage();
@@ -99,15 +100,26 @@ class LoginPageState extends State<LoginPage> {
       if (state is ListaUsuarioShowState) {
         return Scaffold(
             body: SingleChildScrollView(
-          child: Container(
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(top: 40, left: 25, right: 20),
-              child: ListView.builder(
-                  itemCount: state.usuarios.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return item(context, state.usuarios[index]);
-                  })),
-        ));
+              child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.only(top: 40, left: 25, right: 20),
+                  child: ListView.builder(
+                      itemCount: state.usuarios.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return item(context, state.usuarios[index]);
+                      })),
+            ),
+            floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  Usuario usuario_r = await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return NuevoUsuarioDialog();
+                      });
+                  BlocProvider.of<LoginBloc>(context)
+                      .add(AddUsuarioEvent(usuario: usuario_r));
+                },
+                child: Icon(Icons.add)));
       }
     });
   }
@@ -121,23 +133,24 @@ class LoginPageState extends State<LoginPage> {
           Row(
             children: [
               CircleAvatar(
-                child: Text(usuario.user_name.toString()),
+                child: Text(usuario.user_name.toString().substring(0, 1)),
               ),
               SizedBox(width: 20),
-              Container(
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(usuario.user_name,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 10),
-                        Text("Valor :" + usuario.token.toString() + "%",
-                            style:
-                                TextStyle(fontSize: 12, color: Colors.black54)),
-                      ])),
+              Expanded(
+                child: Container(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text(usuario.user_name,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 10),
+                      Text("Valor :" + usuario.token.toString() + "%",
+                          style:
+                              TextStyle(fontSize: 12, color: Colors.black54)),
+                    ])),
+              ),
             ],
           ),
           SizedBox(height: 10),

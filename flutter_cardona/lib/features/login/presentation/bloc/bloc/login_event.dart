@@ -14,3 +14,8 @@ class VerificarUsuarioEvent extends LoginEvent {
   final String password;
   VerificarUsuarioEvent({this.password, this.username});
 }
+
+class AddUsuarioEvent extends LoginEvent {
+  final Usuario usuario;
+  AddUsuarioEvent({this.usuario});
+}

@@ -8,5 +8,5 @@ class Usuario extends Equatable {
 
   Usuario({this.user_name, this.password, this.token, this.id});
 
-  List<Object> get props => [];
+  List<Object> get props => [user_name, password, token, id];
 }

@@ -25,8 +25,8 @@ class LoginRemoteDataSource implements LoginRemoteDataSourceContract {
 
   @override
   Future<Usuario> nuevoUsuario(Usuario usuario) {
-    // TODO: implement nuevoUsuario
-    throw UnimplementedError();
+    print("################Solo falta conectar el endpint para nuevo usario");
+    return Future<Usuario>.value(Usuario());
   }
 
   @override
@@ -46,7 +46,6 @@ class LoginRemoteDataSource implements LoginRemoteDataSourceContract {
     );
 
     if (response.statusCode == 200) {
-      print("hola mama");
       Iterable list = json.decode(response.body);
       List<UsuarioModel> usuarios =
           list.map((model) => UsuarioModel.fromJson(model)).toList();

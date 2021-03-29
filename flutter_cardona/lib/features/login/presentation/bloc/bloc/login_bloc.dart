@@ -17,6 +17,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final NuevoUsuario nuevoUsuario;
   final VerificarUsuario verificarUsuario;
 
+  bool _refrescar = false;
+  List<Usuario> _usuarios;
+
   LoginBloc(
       {@required GetAllUser getAllUser,
       @required NuevoUsuario nuevoUsuario,
@@ -33,9 +36,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is VerificarUsuarioEvent) {
       bool esta_registrado = await verificarUsuario(ParamsVerificarUsuario(
           Usuario(password: "3434343", user_name: "lina@gmail.com")));
-      List<Usuario> usuarios = await getAllUser(NoParams());
+      _usuarios = await getAllUser(NoParams());
+      _refrescar = _refrescar ? false : true;
+      yield ListaUsuarioShowState(usuarios: _usuarios, refrescar: _refrescar);
+    }
 
-      yield ListaUsuarioShowState(usuarios: usuarios);
+    if (event is AddUsuarioEvent) {
+      List<Usuario> usuarios = [];
+
+      usuarios.addAll(_usuarios);
+      usuarios.add(event.usuario);
+      _usuarios = [];
+      _usuarios.addAll(usuarios);
+      _refrescar = _refrescar ? false : true;
+      nuevoUsuario(ParamsNuevoUsuario(event.usuario));
+      yield ListaUsuarioShowState(usuarios: usuarios, refrescar: _refrescar);
     }
   }
 }

@@ -15,8 +15,11 @@ class LoginRepository implements UserContracts {
 
   @override
   Future<Usuario> nuevoUsuario(Usuario usuario) {
-    // TODO: implement nuevoUsuario
-    throw UnimplementedError();
+    return loginRemoteDataSourceContract.nuevoUsuario(UsuarioModel(
+        password: usuario.password,
+        id: usuario.id,
+        token: usuario.token,
+        user_name: usuario.user_name));
   }
 
   @override
