@@ -25,7 +25,7 @@ class _NuevoUsuarioDialogState extends State<NuevoUsuarioDialog> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+          padding: EdgeInsets.only(top: 20, left: 10, right: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -73,7 +73,8 @@ class _NuevoUsuarioDialogState extends State<NuevoUsuarioDialog> {
                       autofocus: true,
                     )),
               ]),
-              Align(
+              Expanded(
+                  child: Align(
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
                     onPressed: () {
@@ -86,10 +87,7 @@ class _NuevoUsuarioDialogState extends State<NuevoUsuarioDialog> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text(
-                              "Cancelar",
-                              style: TextStyle(fontSize: 18),
-                            )),
+                            child: Icon(Icons.cancel)),
                         FlatButton(
                             onPressed: () {
                               Navigator.of(context).pop(Usuario(
@@ -97,13 +95,10 @@ class _NuevoUsuarioDialogState extends State<NuevoUsuarioDialog> {
                                   user_name:
                                       controller_username.text.toString()));
                             },
-                            child: Text(
-                              "Aceptar",
-                              style: TextStyle(fontSize: 18),
-                            )),
+                            child: Icon(Icons.check)),
                       ],
                     )),
-              ),
+              )),
             ],
           ),
         )

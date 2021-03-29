@@ -24,3 +24,11 @@ class LoginInicioErrorState extends LoginState {
 
   LoginInicioErrorState({this.mensaje});
 }
+
+class LoginListaUsuarioErrorState extends LoginState {
+  String mensaje;
+  final List<Usuario> usuarios;
+  final bool refrescar;
+
+  LoginListaUsuarioErrorState({this.mensaje, this.refrescar, this.usuarios});
+}

@@ -56,15 +56,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     if (event is AddUsuarioEvent) {
-      List<Usuario> usuarios = [];
-
-      usuarios.addAll(_usuarios);
-      usuarios.add(event.usuario);
-      _usuarios = [];
-      _usuarios.addAll(usuarios);
       _refrescar = _refrescar ? false : true;
-      nuevoUsuario(ParamsNuevoUsuario(event.usuario));
-      yield ListaUsuarioShowState(usuarios: usuarios, refrescar: _refrescar);
+
+      if (validadorCampo.isEmailvalido(event.usuario.user_name) &&
+          validadorCampo.isCampoSinNul(event.usuario.password)) {
+        List<Usuario> usuarios = [];
+
+        usuarios.addAll(_usuarios);
+        usuarios.add(event.usuario);
+        _usuarios = [];
+        _usuarios.addAll(usuarios);
+        nuevoUsuario(ParamsNuevoUsuario(event.usuario));
+        yield ListaUsuarioShowState(usuarios: usuarios, refrescar: _refrescar);
+      } else {
+        yield LoginListaUsuarioErrorState(
+            mensaje: "por favor verificar email o ingrese una contraseña",
+            usuarios: _usuarios,
+            refrescar: _refrescar);
+      }
     }
   }
 }
