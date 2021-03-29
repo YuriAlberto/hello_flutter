@@ -16,7 +16,7 @@ class ListaUsuarioShowState extends LoginState {
   ListaUsuarioShowState({this.usuarios, this.refrescar});
 
   @override
-  List<Object> get props => [usuarios];
+  List<Object> get props => [usuarios, refrescar];
 }
 
 class LoginInicioErrorState extends LoginState {
@@ -26,9 +26,12 @@ class LoginInicioErrorState extends LoginState {
 }
 
 class LoginListaUsuarioErrorState extends LoginState {
-  String mensaje;
+  final String mensaje;
   final List<Usuario> usuarios;
   final bool refrescar;
 
   LoginListaUsuarioErrorState({this.mensaje, this.refrescar, this.usuarios});
+
+  @override
+  List<Object> get props => [usuarios, refrescar, mensaje];
 }

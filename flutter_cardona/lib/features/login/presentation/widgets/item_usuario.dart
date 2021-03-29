@@ -28,7 +28,11 @@ class ItemUsuario extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(height: 10),
-                      Text("Valor :" + usuario.token.toString() + "%",
+                      Text(
+                          "Token :" +
+                              ((usuario.token.toString() == "null")
+                                  ? "Sin token"
+                                  : usuario.token.toString()),
                           style:
                               TextStyle(fontSize: 12, color: Colors.black54)),
                     ])),
